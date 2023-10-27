@@ -1,33 +1,69 @@
-﻿#include <iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
 #include <string>
 using namespace std;
 
 
-class Expression {
-private:
-	string expression;
-public:
-	Expression(const string& expression) : expression(expression) {}
 
+class Expression 
+{
+private:
+	char*expression;
+public:
+	Expression(const string& expression)  
+	{
+		string result;
+		for (char c : expression) {
+			if (!std::isspace(c)) {
+				result += c;
+			}
+		}
+		this->expression = new char[result.length() + 1];
+		strcpy(this->expression, result.c_str());
+	}
+
+	~Expression() {
+		if(this->expression!=nullptr)
+		delete[] this->expression;
+	}
+
+	Expression(const Expression& other) {
+		this->expression = new char[strlen(other.expression) + 1];
+		strcpy(this->expression, other.expression);
+	}
+
+	Expression& operator=(const Expression& other) {
+		if (this == &other) {
+			return *this;
+		}
+		delete[] expression;
+		
+		this->expression = new char[strlen(other.expression) + 1];
+		
+		strcpy(this->expression, other.expression);
+		
+		return *this;
+	}
+	
 	// Metode pentru analiza expresiei și extragerea componentelor
 	// Puteți adăuga aici funcții pentru manipularea expresiilor, cum ar fi extragerea operatorilor și operandelor.
 };
 
-class ExpressionEvaluator {
-public:
-	double evaluate(const string& expression) {
-		Expression expr(expression);
 
+class ExpressionEvaluator 
+{
+public:
+	double evaluate(const string& expression)
+	{
+		Expression expr(expression);
 		// Implementați aici evaluarea expresiei utilizând datele din clasa Expression
 		// Această funcție poate să utilizeze o stivă pentru a gestiona prioritățile și operațiile matematice.
-
-
-
-		return 0.0; // Rezultat temporar
+		return 0.0;
 	}
 };
 
-class Calculator {
+class Calculator 
+{
 private:
 	bool isRunning;
 public:
@@ -45,10 +81,6 @@ public:
 	{
 		this->isRunning = true;
 	}
-	Calculator(bool isRunning)
-	{
-		this->isRunning = isRunning;
-	}
 	void run() {
 		ExpressionEvaluator evaluator;
 		string expression;
@@ -59,7 +91,7 @@ public:
 			cout << "Expresie: ";
 			getline(cin, expression);
 
-			if (expression == "exit") {
+			if (expression == "exit" || expression == "") {
 				this->isRunning = false;
 				break;
 			}
