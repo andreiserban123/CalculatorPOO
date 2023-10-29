@@ -14,7 +14,7 @@ public:
 	{
 		string result;
 		for (char c : expression) {
-			if (!std::isspace(c)) {
+			if (!isspace(c)) {
 				result += c;
 			}
 		}
@@ -32,8 +32,10 @@ public:
 		strcpy(this->expression, other.expression);
 	}
 
-	Expression& operator=(const Expression& other) {
-		if (this == &other) {
+	Expression& operator=(const Expression& other) 
+	{
+		if (this == &other) 
+		{
 			return *this;
 		}
 		delete[] expression;
