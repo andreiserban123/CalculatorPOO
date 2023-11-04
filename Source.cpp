@@ -4,7 +4,6 @@
 using namespace std;
 
 
-
 class Expression 
 {
 private:
@@ -46,9 +45,6 @@ public:
 		
 		return *this;
 	}
-	
-	// Metode pentru analiza expresiei și extragerea componentelor
-	// Puteți adăuga aici funcții pentru manipularea expresiilor, cum ar fi extragerea operatorilor și operandelor.
 };
 
 
@@ -58,8 +54,6 @@ public:
 	double evaluate(const string& expression)
 	{
 		Expression expr(expression);
-		// Implementați aici evaluarea expresiei utilizând datele din clasa Expression
-		// Această funcție poate să utilizeze o stivă pentru a gestiona prioritățile și operațiile matematice.
 		return 0.0;
 	}
 };
