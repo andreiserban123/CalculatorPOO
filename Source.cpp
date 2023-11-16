@@ -6,7 +6,6 @@ using namespace std;
 
 class Expression 
 {
-private:
 	char*expression;
 public:
 	Expression(const string& expression)  
@@ -44,6 +43,20 @@ public:
 		strcpy(this->expression, other.expression);
 		
 		return *this;
+	}
+	string getExpression() {
+
+		if (this->expression != nullptr) {
+			return this->expression;
+		}
+		return "";
+	}
+	void setExpression(char* expr) {
+		if (expr != nullptr) {
+			delete[] this->expression;
+			this->expression = new char[strlen(expr) + 1];
+			strcpy(expression, expr);
+		}
 	}
 };
 
