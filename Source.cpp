@@ -4,37 +4,44 @@
 using namespace std;
 
 class Evaluator {
-	float result = 0;
+	double result = 0;
+	bool err = false;
 public:
 	Evaluator() {
 		this->result = 0;
 	}
-	Evaluator(float result) {
+	Evaluator(double result) {
 		this->result = result;
 	}
-	void evaluate(float operator1, float operator2, char token) {
-		switch (token) {
-		case '+':
-			result = operator1 + operator2;
-			break;
-		case '-':
-			result = operator1 - operator2;
-			break;
-		case '*':
-			result = operator1 * operator2;
-			break;
-		case '/':
-			if (operator2 != 0) {
-				result = operator1 / operator2;
+	void evaluate(double operator1, double operator2, char token) {
+	
+		try {
+			switch (token) {
+			case '+':
+				result = operator1 + operator2;
+				break;
+			case '-':
+				result = operator1 - operator2;
+				break;
+			case '*':
+				result = operator1 * operator2;
+				break;
+			case '/':
+				if (operator2 != 0) {
+					result = operator1 / operator2;
+				}
+				else {
+					throw exception("Error: Division by 0");
+				}
+				break;
+			default:
+				cout << "Error: Unknown operator." << endl;
+				return;
 			}
-			else {
-				cout << "Error: Division by zero." << endl;
-				return;  
-			}
-			break;
-		default:
-			cout << "Error: Unknown operator." << endl;
-			return; 
+		}
+		catch (exception e) {
+			cout << e.what();
+			err = true;
 		}
 	}
 
@@ -43,12 +50,15 @@ public:
 		this->result++;
 		return copie;
 	}
-	float getResult() {
+	double getResult() {
 		return this->result;
 	}
 
 	void printFinalResult()  {
-		cout << "Final Result: " << getResult() << endl;
+		if(!err)
+		cout<<"Result:" << result;
+		cout << endl;
+
 	}
 	friend void operator<<(ostream& console, Evaluator& e);
 	friend void operator>>(istream& console, Evaluator& e);
@@ -64,10 +74,12 @@ void operator>>(istream& console, Evaluator& e) {
 class Parser {
 	char* expression = nullptr;
 	double* results = nullptr;
+	int noResults = 0;
 public:
 	Parser() {
 		this->expression = nullptr;
 		this->results = nullptr;
+		noResults = 0;
 	} 
 	Parser(const string& expression) {
 		string result;
@@ -78,6 +90,8 @@ public:
 		}
 		this->expression = new char[result.length() + 1];
 		strcpy_s(this->expression, result.length() + 1, result.c_str());
+		noResults = 0;
+		this->results = nullptr;
 	}
 
 	~Parser() {
@@ -94,7 +108,7 @@ public:
 			startPos = endPos = index = 0;
 			char oper;
 
-			string vec[100];
+			string* vec = new string[expr.size()];
 			
 			for (int i = 0; i < expr.size(); i++) {
 				if ((!isdigit(expr[i])) && expr[i]!= '.' ) {
@@ -109,16 +123,17 @@ public:
 			if (startPos < expr.size()) {
 				vec[index++] = expr.substr(startPos);
 			}
-			Evaluator evaluator(stof(vec[0]));
+			Evaluator evaluator(stod(vec[0]));
 			for (int i = 1; i < index; i++) {
 				if (!isdigit(vec[i][0])) {
 					
-					float operand2 = stof(vec[i + 1]);
+					double operand2 = stod(vec[i + 1]);
 					char token = vec[i][0];
 					evaluator.evaluate(evaluator.getResult(), operand2, token);
 				}
 			}
 			evaluator.printFinalResult();
+			delete[] vec;
 		}
 	}
 
@@ -165,10 +180,19 @@ public:
 
 
 class Calculator {
+	const int id;
 	bool isRunning = false;
 	static int noCalculators;
 public:
-	Calculator(){
+	Calculator():id(0) {
+		this->isRunning = false;
+	}
+
+	int getId() {
+		return this->id;
+	}
+
+	Calculator(int id): id(id){
 		this->isRunning = true;
 		Calculator::noCalculators++;
 	}
@@ -215,7 +239,9 @@ public:
 
 int Calculator::noCalculators = 0;
 
+
+
 int main() {
-	Calculator calc;
+	Calculator calc(1);
 	calc.run();
 }
