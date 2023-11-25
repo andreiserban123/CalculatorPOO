@@ -1,15 +1,12 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
+﻿#include <iostream>
 #include <string>
+
 using namespace std;
 
-
-class Expression 
-{
-	char*expression;
+class Parser {
+	char* expression;
 public:
-	Expression(const string& expression)  
-	{
+	Parser(const string& expression) {
 		string result;
 		for (char c : expression) {
 			if (!isspace(c)) {
@@ -17,85 +14,73 @@ public:
 			}
 		}
 		this->expression = new char[result.length() + 1];
-		strcpy(this->expression, result.c_str());
+		strcpy_s(this->expression, result.length() + 1, result.c_str());
 	}
 
-	~Expression() {
-		if(this->expression!=nullptr)
-		delete[] this->expression;
+	~Parser() {
+		if (this->expression != nullptr)
+			delete[] this->expression;
 	}
 
-	Expression(const Expression& other) {
+	Parser(const Parser& other) {
 		this->expression = new char[strlen(other.expression) + 1];
-		strcpy(this->expression, other.expression);
+		strcpy_s(this->expression, strlen(other.expression) + 1, other.expression);
 	}
 
-	Expression& operator=(const Expression& other) 
-	{
-		if (this == &other) 
-		{
+	Parser& operator=(const Parser& other) {
+		if (this == &other) {
 			return *this;
 		}
-		delete[] expression;
-		
-		this->expression = new char[strlen(other.expression) + 1];
-		
-		strcpy(this->expression, other.expression);
-		
+
+		if (other.expression != nullptr) {
+			delete[] expression;
+			this->expression = new char[strlen(other.expression) + 1];
+			strcpy_s(this->expression, strlen(other.expression) + 1, other.expression);
+		}
 		return *this;
 	}
-	string getExpression() {
 
+	string getExpression() {
 		if (this->expression != nullptr) {
 			return this->expression;
 		}
 		return "";
 	}
-	void setExpression(char* expr) {
-		if (expr != nullptr) {
+
+	void setExpression(const string& expr) {
+		if (!expr.empty()) {
 			delete[] this->expression;
-			this->expression = new char[strlen(expr) + 1];
-			strcpy(expression, expr);
+			this->expression = new char[expr.length() + 1];
+			strcpy_s(this->expression, expr.length() + 1, expr.c_str());
 		}
 	}
 };
 
-
-class ExpressionEvaluator 
-{
-public:
-	double evaluate(const string& expression)
-	{
-		Expression expr(expression);
-		return 0.0;
-	}
+class Evaluator {
 };
 
-class Calculator 
-{
-private:
-	bool isRunning;
+class Calculator {
+	bool isRunning = false;
+	static int noCalculators;
 public:
+	Calculator() {
+		isRunning = true;
+		Calculator::noCalculators++;
+	}
 
-	bool getIsRunning()
-	{
+	bool getIsRunning() const {
 		return this->isRunning;
 	}
 
-	void setIsRunning(bool isRunning)
-	{
+	void setIsRunning(bool isRunning) {
 		this->isRunning = isRunning;
 	}
-	Calculator()
-	{
-		this->isRunning = true;
+	~Calculator() {
+		Calculator::noCalculators--;
 	}
 	void run() {
-		ExpressionEvaluator evaluator;
 		string expression;
-
 		cout << "Calculatorul stiintific. Introduceti o expresie sau 'exit' pentru a iesi." << endl;
-
 		while (this->isRunning) {
 			cout << "Expresie: ";
 			getline(cin, expression);
@@ -104,15 +89,16 @@ public:
 				this->isRunning = false;
 				break;
 			}
-			double result = evaluator.evaluate(expression);
+
+			float result = 0;
 			cout << "Rezultat: " << result << endl;
 		}
 	}
 };
 
-int main()
-{
+int Calculator::noCalculators = 0;
+
+int main() {
 	Calculator calc;
 	calc.run();
 }
-
