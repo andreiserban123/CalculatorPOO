@@ -179,12 +179,12 @@ public:
 };
 
 
-class Calculator {
+class MyCalculator1 {
 	const int id;
 	bool isRunning = false;
 	static int noCalculators;
 public:
-	Calculator():id(0) {
+	MyCalculator1():id(0) {
 		this->isRunning = false;
 	}
 
@@ -192,9 +192,9 @@ public:
 		return this->id;
 	}
 
-	Calculator(int id): id(id){
+	MyCalculator1(int id): id(id){
 		this->isRunning = true;
-		Calculator::noCalculators++;
+		MyCalculator1::noCalculators++;
 	}
 
 	bool getIsRunning() const {
@@ -205,8 +205,8 @@ public:
 		this->isRunning = isRunning;
 	}
 
-	~Calculator() {
-		Calculator::noCalculators--;
+	~MyCalculator1() {
+		MyCalculator1::noCalculators--;
 	}
 	void run() {
 		Parser p;
@@ -233,15 +233,15 @@ public:
 	}
 
 	static void printNumberOfCalcs() {
-		cout << "Number of calculators is: " << Calculator::noCalculators;
+		cout << "Number of calculators is: " << MyCalculator1::noCalculators;
 	}
 };
 
-int Calculator::noCalculators = 0;
+int MyCalculator1::noCalculators = 0;
 
 
 
 int main() {
-	Calculator calc(1);
+	MyCalculator1 calc(1);
 	calc.run();
 }
