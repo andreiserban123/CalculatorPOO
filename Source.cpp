@@ -14,7 +14,6 @@ public:
 		this->result = result;
 	}
 	void evaluate(double operator1, double operator2, char token) {
-	
 		try {
 			switch (token) {
 			case '+':
@@ -26,6 +25,9 @@ public:
 			case '*':
 				result = operator1 * operator2;
 				break;
+			case '%':
+				result = (int)operator1 % (int)operator2;
+				break;
 			case '/':
 				if (operator2 != 0) {
 					result = operator1 / operator2;
@@ -36,6 +38,7 @@ public:
 				break;
 			default:
 				cout << "Error: Unknown operator." << endl;
+				err = true;
 				return;
 			}
 		}
