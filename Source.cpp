@@ -37,7 +37,7 @@ public:
 				break;
 			case '/':
 				if (operator2 != 0) {
-					result = operator1 / operator2;
+					result = (double)operator1 / (double)operator2;
 				}
 				else {
 					throw exception("Error: Division by 0");
@@ -111,8 +111,8 @@ public:
 			delete[] this->expression;
 	}
 
-	void removeSpaces(string expr, string *vec) {
-		int startPos, endPos, index;
+	void removeSpaces(string expr, string *vec, int &index) {
+		int startPos, endPos;
 		startPos = endPos = index = 0;
 		char oper;
 		for (int i = 0; i < expr.size(); i++) {
@@ -134,9 +134,11 @@ public:
 			
 			string expr = this->expression;
 			string* vec = new string[expr.size()];
-			removeSpaces(expr, vec);
+			int index = 0;
+			removeSpaces(expr,  vec, index);
+
 			Evaluator evaluator(stod(vec[0]));
-			for (int i = 1; i < vec->size(); i++) {
+			for (int i = 1; i < index; i++) {
 				if (!isdigit(vec[i][0])) {
 					
 					double operand2 = stod(vec[i + 1]);
@@ -239,8 +241,6 @@ void operator << (ostream& console, Parser& p) {
 	console << p.getExpression();
 }
 
-
-
 class Calculator {
 	const int id;
 	bool isRunning = false;
@@ -329,5 +329,4 @@ int Calculator::noCalculators = 0;
 int main() {
 	Calculator calc(1);
 	calc.run();
-
 }
