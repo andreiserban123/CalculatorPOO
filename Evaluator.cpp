@@ -1,17 +1,17 @@
+// Evaluator.cpp
 #include "Evaluator.h"
 #include <iostream>
-#include <exception>
 
 Evaluator::Evaluator() : result(0), err(false) {}
 
-Evaluator::Evaluator(double result) : result(result) {}
+Evaluator::Evaluator(double result) : result(result), err(false) {}
 
 bool Evaluator::getErr() {
-    return this->err;
+    return err;
 }
 
-bool Evaluator::setErr(bool t) {
-    this->err = t;
+void Evaluator::setErr(bool t) {
+	this->err = t;
 }
 
 void Evaluator::evaluate(double operator1, double operator2, char token) {
@@ -51,21 +51,21 @@ void Evaluator::evaluate(double operator1, double operator2, char token) {
 
 Evaluator Evaluator::operator++(int) {
     Evaluator copie = *this;
-    this->result++;
+    result++;
     return copie;
 }
 
 Evaluator& Evaluator::operator++() {
-    this->result++;
+    result++;
     return *this;
 }
 
 double Evaluator::getResult() {
-    return this->result;
+    return result;
 }
 
 void Evaluator::setResult(int x) {
-    this->result = x;
+    result = x;
 }
 
 void Evaluator::printFinalResult() {
