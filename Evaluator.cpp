@@ -1,4 +1,3 @@
-// Evaluator.cpp
 #include "Evaluator.h"
 #include <iostream>
 

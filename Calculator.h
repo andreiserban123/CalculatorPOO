@@ -1,4 +1,3 @@
-// Calculator.h
 #pragma once
 #include "Parser.h"
 #include <iostream>

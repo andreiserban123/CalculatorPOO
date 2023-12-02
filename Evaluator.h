@@ -1,4 +1,3 @@
-// Evaluator.h
 #pragma once
 #include <iostream>
 
