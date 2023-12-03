@@ -123,6 +123,16 @@ void operator>>(std::istream& console, Parser& p) {
     strcpy_s(p.expression, g.size() + 1, g.c_str());
 }
 
+void operator<<(std::ostream& console, const Parser& p)
+{
+    if (p.expression != nullptr) {
+        console << p.expression << std::endl;
+    }
+    else {
+        console << "expresia este nula" << std::endl;
+    }
+}
+
 bool Parser::operator>(int x) {
     if (expression != nullptr)
         return std::strlen(expression) > x;
