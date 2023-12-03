@@ -55,6 +55,16 @@ void Calculator::printNumberOfCalcs() {
     std::cout << "Number of calculators is: " << Calculator::noCalculators;
 }
 
+bool Calculator::operator!()
+{
+    return !this->isRunning;
+}
+
+Calculator::operator bool()
+{
+    return this->isRunning;
+}
+
 void operator>>(std::istream& console, Calculator& c) {
     std::cout << "IsRunning or not ?:";
     console >> c.isRunning;

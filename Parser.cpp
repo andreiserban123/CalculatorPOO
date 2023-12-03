@@ -125,13 +125,16 @@ void operator>>(std::istream& console, Parser& p) {
 
 void operator<<(std::ostream& console, const Parser& p)
 {
+
     if (p.expression != nullptr) {
-        console << p.expression << std::endl;
-    }
-    else {
-        console << "expresia este nula" << std::endl;
-    }
+                console << p.expression << std::endl;
+     }
+            else {
+                console << "expresia este nula" << std::endl;
+            }
 }
+
+
 
 bool Parser::operator>(int x) {
     if (expression != nullptr)
