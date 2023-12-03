@@ -1,5 +1,6 @@
 #include "Evaluator.h"
 #include <iostream>
+#include <iomanip>
 
 Evaluator::Evaluator() : result(0), err(false) {}
 
@@ -69,7 +70,7 @@ void Evaluator::setResult(double x) {
 
 void Evaluator::printFinalResult() {
     if (!err)
-        std::cout << "Result:" << result;
+        std::cout << std::fixed << std::setprecision(4) << "Result:" << result;
     std::cout << std::endl;
 }
 
