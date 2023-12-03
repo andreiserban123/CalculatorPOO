@@ -63,7 +63,7 @@ double Evaluator::getResult() {
     return result;
 }
 
-void Evaluator::setResult(int x) {
+void Evaluator::setResult(double x) {
     result = x;
 }
 

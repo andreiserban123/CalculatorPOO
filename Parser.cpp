@@ -17,8 +17,11 @@ Parser::Parser(const std::string& expression) {
 }
 
 Parser::~Parser() {
-    if (expression != nullptr)
+    if (expression != nullptr) {
         delete[] expression;
+        this->expression = nullptr;
+    }
+
 }
 
 void Parser::removeSpaces(std::string expr, std::string* vec, int& index) {
@@ -79,9 +82,7 @@ Parser& Parser::operator=(const Parser& other) {
         expression = new char[std::strlen(other.expression) + 1];
         strcpy_s(expression, std::strlen(other.expression) + 1, other.expression);
     }
-    else {
-        expression = nullptr;
-    }
+  
     return *this;
 }
 
@@ -100,7 +101,8 @@ char* Parser::getExpression() {
 void Parser::setExpression(const std::string& expr) {
     if (!expr.empty()) {
         std::string result;
-        for (char c : expr) {
+        for (int i = 0; i < expr.length(); ++i) {
+            char c = expr[i];
             if (!std::isspace(c)) {
                 result += c;
             }
@@ -110,6 +112,7 @@ void Parser::setExpression(const std::string& expr) {
         strcpy_s(expression, result.length() + 1, result.c_str());
     }
 }
+
 
 void operator>>(std::istream& console, Parser& p) {
     std::cout << "Enter an expression: ";
