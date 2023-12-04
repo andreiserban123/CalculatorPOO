@@ -22,6 +22,7 @@ public:
     friend void operator>>(std::istream& console, Parser& p);
     friend void operator<<(std::ostream& console, const Parser& p);
 
-    bool operator>(int x);
+    char& operator[](int x);
     int operator+(Parser& p);
+    int operator+(int x);
 };

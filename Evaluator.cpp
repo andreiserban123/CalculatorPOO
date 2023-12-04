@@ -60,6 +60,16 @@ Evaluator& Evaluator::operator++() {
     return *this;
 }
 
+bool Evaluator::operator>(Evaluator& e)
+{
+	if (this->result > e.result) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 double Evaluator::getResult() {
     return result;
 }

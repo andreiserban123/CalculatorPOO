@@ -4,7 +4,9 @@
 
 int Calculator::noCalculators = 0;
 
-Calculator::Calculator() : id(0), isRunning(false) {}
+Calculator::Calculator() : id(0), isRunning(false) {
+    Calculator::noCalculators++;
+}
 
 Calculator::Calculator(int id) : id(id) {
     isRunning = true;
@@ -73,9 +75,9 @@ void operator>>(std::istream& console, Calculator& c) {
 void operator<<(std::ostream& console, Calculator& c) {
     std::cout << "IS RUNNING: ";
     if (c.isRunning == true) {
-        console << "It's true";
+        console << "true";
     }
     else {
-        console << "It's false";
+        console << "false";
     }
 }

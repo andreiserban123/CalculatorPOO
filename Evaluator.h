@@ -16,9 +16,9 @@ public:
 
     Evaluator operator++(int);
     Evaluator& operator++();
+    bool operator>(Evaluator &e);
     double getResult();
     void setResult(double x);
-
     void printFinalResult();
     friend void operator<<(std::ostream& console, Evaluator& e);
     friend void operator>>(std::istream& console, Evaluator& e);
