@@ -25,4 +25,6 @@ public:
     char& operator[](int x);
     int operator+(Parser& p);
     int operator+(int x);
+    int getPrecedence(char op);
+    std::string infixToRPN(const std::string& infixExpression);
 };

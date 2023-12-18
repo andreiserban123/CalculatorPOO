@@ -12,6 +12,8 @@ public:
 
     bool getErr();
     void setErr(bool t);
+    double performOperation(double operand1, double operand2, char operation);
+    double evaluateRPN(const std::string& rpnExpression);
     void evaluate(double operator1, double operator2, char token);
 
     Evaluator operator++(int);

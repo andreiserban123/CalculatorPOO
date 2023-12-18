@@ -1,6 +1,8 @@
 #include "Evaluator.h"
 #include <iostream>
 #include <iomanip>
+#include <sstream>
+#include <stack>
 
 Evaluator::Evaluator() : result(0), err(false) {}
 
@@ -14,39 +16,102 @@ void Evaluator::setErr(bool t) {
 	this->err = t;
 }
 
-void Evaluator::evaluate(double operator1, double operator2, char token) {
-	try {
-		switch (token) {
-		case '+':
-			result = operator1 + operator2;
-			break;
-		case '-':
-			result = operator1 - operator2;
-			break;
-		case '*':
-			result = operator1 * operator2;
-			break;
-		case '%':
-			result = (int)operator1 % (int)operator2;
-			break;
-		case '/':
-			if (operator2 != 0) {
-				result = (double)operator1 / (double)operator2;
-			}
-			else {
-				throw std::exception("Error: Division by 0");
-			}
-			break;
-		default:
-			std::cout << "Error: Unknown operator." << std::endl;
-			err = true;
-			return;
-		}
-	}
-	catch (std::exception e) {
-		std::cout << e.what();
-		err = true;
-	}
+double Evaluator::performOperation(double operand1, double operand2, char operation) {
+    switch (operation) {
+    case '+':
+        return operand1 + operand2;
+    case '-':
+        return operand1 - operand2;
+    case '*':
+        return operand1 * operand2;
+    case '/':
+        if (operand2 != 0) {
+            return operand1 / operand2;
+        }
+        else {
+            std::cerr << "Error: Division by 0." << std::endl;
+            err = true;
+            return 0;
+        }
+    case '%':
+        return int(operand1) % int(operand2);
+    case '#':
+        if (operand1 >= 0 && operand2 > 0) {
+            return pow(operand1, 1.0 / operand2);
+        }
+        else {
+            std::cerr << "Error: Invalid radical expression." << std::endl;
+            err = true;
+            return 0;
+        }
+    case '^':
+        return pow(operand1, operand2);
+    default:
+        std::cerr << "Error: Unknown operator." << std::endl;
+        err = true;
+        return 0;
+    }
+}
+
+double stringToDouble(const std::string& str) {
+    std::istringstream iss(str);
+    double result;
+    iss >> result;
+    return result;
+}
+
+double Evaluator::evaluateRPN(const std::string& rpnExpression) {
+    std::stack<double> operandStack;
+
+    std::istringstream iss(rpnExpression);
+    std::string token;
+    while (iss >> token) {  
+        if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
+            operandStack.push(stringToDouble(token));
+        }
+        else {
+            if (token.length() == 1 && !std::isalnum(token[0])) {
+                // It's an operator
+                if (operandStack.size() < 2) {
+                    std::cerr << "Error: Insufficient operands for operator " << token << std::endl;
+                    err = true;
+                    return 0;
+                }
+
+                double operand2 = operandStack.top();
+                operandStack.pop();
+                double operand1 = operandStack.top();
+                operandStack.pop();
+
+                double result = performOperation(operand1, operand2, token[0]);
+                operandStack.push(result);
+            }
+            else {
+                std::cerr << "Error: Invalid token in RPN expression: " << token << std::endl;
+                err = true;
+                return 0;
+            }
+        }
+    }
+
+    if (operandStack.size() != 1) {
+        std::cerr << "Error: Invalid RPN expression" << std::endl;
+        err = true;
+        return 0;
+    }
+
+    return operandStack.top();
+}
+
+
+void Evaluator::evaluate(double operand1, double operand2, char token) {
+    try {
+        result = performOperation(operand1, operand2, token);
+    }
+    catch (std::exception& e) {
+        std::cerr << e.what();
+        err = true;
+    }
 }
 
 Evaluator Evaluator::operator++(int) {

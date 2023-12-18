@@ -1,7 +1,8 @@
-#include "Parser.h"
+﻿#include "Parser.h"
 #include "Evaluator.h"
 #include <iostream>
 #include <string>
+#include <stack>
 
 Parser::Parser() : expression(nullptr) {}
 
@@ -51,27 +52,18 @@ void Parser::removeSpaces(std::string expr, std::string* vec, int& index)
     }
 }
 
-void Parser::processExpression()
-{
-    if (expression != nullptr)
-    {
+void Parser::processExpression() {
+    if (expression != nullptr) {
         std::string expr = expression;
-        std::string* vec = new std::string[expr.size()];
-        int index = 0;
-        removeSpaces(expr, vec, index);
 
-        Evaluator evaluator(std::stod(vec[0]));
-        for (int i = 1; i < index; i++)
-        {
-            if (!std::isdigit(vec[i][0]))
-            {
-                double operand2 = std::stod(vec[i + 1]);
-                char token = vec[i][0];
-                evaluator.evaluate(evaluator.getResult(), operand2, token);
-            }
-        }
+        Evaluator evaluator;
+
+        std::string rpnExpression = infixToRPN(expr);
+
+        double result = evaluator.evaluateRPN(rpnExpression);
+
+        evaluator.setResult(result);
         evaluator.printFinalResult();
-        delete[] vec;
     }
 }
 
@@ -192,3 +184,98 @@ int operator+(int x, Parser& p)
 {
     return p + x;
 }
+
+/*
+
+Testing faza 2 
+
+
+*/
+
+
+
+bool isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c=='^' || c=='#';
+}
+
+bool isOperand(char c) {
+    return std::isalnum(c) || c == '.'; 
+}
+
+bool isOpeningParenthesis(char c) {
+    return c == '(' || c == '[';
+}
+
+bool isClosingParenthesis(char c) {
+    return c == ')' || c == ']';
+}
+
+int Parser::getPrecedence(char op) {
+    if (op == '+' || op == '-') {
+        return 1;
+    }
+    else if (op == '*' || op == '/') {
+        return 2;
+    }
+    return 0; 
+}
+
+std::string Parser::infixToRPN(const std::string& infixExpression) {
+    std::string rpnExpression;
+    std::stack<char> operatorStack;
+
+    for (char c : infixExpression) {
+        if (std::isspace(c)) {
+            continue; 
+        }
+
+        if (isOperand(c)) {
+            rpnExpression += c;
+        }
+        else if (isOperator(c)) {
+            while (!operatorStack.empty() && isOperator(operatorStack.top()) &&
+                getPrecedence(operatorStack.top()) >= getPrecedence(c)) {
+                rpnExpression += operatorStack.top();
+                operatorStack.pop();
+            }
+            operatorStack.push(c);
+        }
+        else if (isOpeningParenthesis(c)) {
+            operatorStack.push(c);
+        }
+        else if (isClosingParenthesis(c)) {
+            while (!operatorStack.empty() && !isOpeningParenthesis(operatorStack.top())) {
+                rpnExpression += operatorStack.top();
+                operatorStack.pop();
+            }
+            if (!operatorStack.empty() && isOpeningParenthesis(operatorStack.top())) {
+                operatorStack.pop(); 
+            }
+            else {
+                std::cerr << "Error: Mismatched parentheses." << std::endl;
+                return ""; 
+            }
+        }
+        else {
+            std::cerr << "Error: Invalid character in expression." << std::endl;
+            return ""; 
+        }
+    }
+
+    while (!operatorStack.empty()) {
+        if (isOpeningParenthesis(operatorStack.top()) || isClosingParenthesis(operatorStack.top())) {
+            std::cerr << "Error: Mismatched parentheses." << std::endl;
+            return ""; 
+        }
+        rpnExpression += operatorStack.top();
+        operatorStack.pop();
+    }
+
+    return rpnExpression;
+}
+
+
+
+
+
+
