@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <stack>
+#include <sstream>
+
 
 Parser::Parser() : expression(nullptr) {}
 
@@ -30,26 +32,29 @@ Parser::~Parser()
     }
 }
 
-void Parser::removeSpaces(std::string expr, std::string* vec, int& index)
-{
-    int startPos, endPos;
-    startPos = endPos = index = 0;
-    char oper;
-    for (int i = 0; i < expr.size(); i++)
-    {
-        if ((!std::isdigit(expr[i])) && expr[i] != '.')
+
+void Parser::removeSpaces() {
+    if (this->expression == nullptr)
+        return;
+
+    std::string expr(this->expression);
+
+    // Remove all spaces
+    expr.erase(std::remove_if(expr.begin(), expr.end(), ::isspace), expr.end());
+
+    // Add spaces around operators
+    for (int i = 0; i < expr.length(); i++) {
+        if (expr[i] == '+' || expr[i] == '-' || expr[i] == '*' || expr[i] == '#' || expr[i] == '^' || expr[i] == '(' || expr[i] == ')' || expr[i] == '[' || expr[i] == ']' || expr[i] == '/' || expr[i] == '%')
         {
-            oper = expr[i];
-            endPos = i - startPos;
-            vec[index++] = expr.substr(startPos, endPos);
-            vec[index++] = oper;
-            startPos = i + 1;
+            expr.insert(i, " ");
+            expr.insert(i + 2, " ");
+            i += 2;
         }
     }
-    if (startPos < expr.size())
-    {
-        vec[index++] = expr.substr(startPos);
-    }
+
+    delete[] this->expression;
+    this->expression = new char[expr.length() + 1];
+    strcpy_s(this->expression, expr.length() + 1, expr.c_str());
 }
 
 void Parser::processExpression() {
@@ -59,6 +64,16 @@ void Parser::processExpression() {
         Evaluator evaluator;
 
         std::string rpnExpression = infixToRPN(expr);
+
+        for (int i = 0; i < rpnExpression.size(); i++) {
+            //insert " "
+            if (rpnExpression[i] == '+' || rpnExpression[i] == '-' || rpnExpression[i] == '*' || rpnExpression[i] == '/' || rpnExpression[i] == '%' || rpnExpression[i] == '^' || rpnExpression[i] == '#')
+            {
+				rpnExpression.insert(i, " ");
+				rpnExpression.insert(i + 2, " ");
+				i += 2;
+			}
+        }
 
         double result = evaluator.evaluateRPN(rpnExpression);
 
@@ -112,24 +127,14 @@ char* Parser::getExpression()
     }
 }
 
-void Parser::setExpression(const std::string& expr)
-{
-    if (!expr.empty())
-    {
-        std::string result;
-        for (int i = 0; i < expr.length(); ++i)
-        {
-            char c = expr[i];
-            if (!std::isspace(c))
-            {
-                result += c;
-            }
-        }
+void Parser::setExpression(const std::string& expr) {
+    if (!expr.empty()) {
         delete[] expression;
-        expression = new char[result.length() + 1];
-        strcpy_s(expression, result.length() + 1, result.c_str());
+        expression = new char[expr.length() + 1];
+        strcpy_s(expression, expr.length() + 1, expr.c_str());
     }
 }
+
 
 void operator>>(std::istream& console, Parser& p)
 {
@@ -185,13 +190,6 @@ int operator+(int x, Parser& p)
     return p + x;
 }
 
-/*
-
-Testing faza 2 
-
-
-*/
-
 
 
 bool isOperator(char c) {
@@ -224,48 +222,51 @@ std::string Parser::infixToRPN(const std::string& infixExpression) {
     std::string rpnExpression;
     std::stack<char> operatorStack;
 
-    for (char c : infixExpression) {
-        if (std::isspace(c)) {
-            continue; 
-        }
+    std::istringstream iss(infixExpression);
+    std::string token;
 
-        if (isOperand(c)) {
-            rpnExpression += c;
+    while (iss >> token) {
+        char firstChar = token[0];
+
+        if (isOperand(firstChar)) {
+            rpnExpression += token + " ";
         }
-        else if (isOperator(c)) {
+        else if (isOperator(firstChar)) {
             while (!operatorStack.empty() && isOperator(operatorStack.top()) &&
-                getPrecedence(operatorStack.top()) >= getPrecedence(c)) {
+                getPrecedence(operatorStack.top()) >= getPrecedence(firstChar)) {
                 rpnExpression += operatorStack.top();
+                rpnExpression += " ";
                 operatorStack.pop();
             }
-            operatorStack.push(c);
+            operatorStack.push(firstChar);
         }
-        else if (isOpeningParenthesis(c)) {
-            operatorStack.push(c);
+        else if (isOpeningParenthesis(firstChar)) {
+            operatorStack.push(firstChar);
         }
-        else if (isClosingParenthesis(c)) {
+        else if (isClosingParenthesis(firstChar)) {
             while (!operatorStack.empty() && !isOpeningParenthesis(operatorStack.top())) {
-                rpnExpression += operatorStack.top();
+                rpnExpression += operatorStack.top(); 
+                rpnExpression += " ";
                 operatorStack.pop();
             }
             if (!operatorStack.empty() && isOpeningParenthesis(operatorStack.top())) {
-                operatorStack.pop(); 
+                operatorStack.pop(); // Scoate și deschiderea parantezei
             }
             else {
                 std::cerr << "Error: Mismatched parentheses." << std::endl;
-                return ""; 
+                return ""; // Expresie invalidă
             }
         }
         else {
             std::cerr << "Error: Invalid character in expression." << std::endl;
-            return ""; 
+            return ""; // Expresie invalidă
         }
     }
 
     while (!operatorStack.empty()) {
         if (isOpeningParenthesis(operatorStack.top()) || isClosingParenthesis(operatorStack.top())) {
             std::cerr << "Error: Mismatched parentheses." << std::endl;
-            return ""; 
+            return ""; // Expresie invalidă
         }
         rpnExpression += operatorStack.top();
         operatorStack.pop();
@@ -273,9 +274,3 @@ std::string Parser::infixToRPN(const std::string& infixExpression) {
 
     return rpnExpression;
 }
-
-
-
-
-
-

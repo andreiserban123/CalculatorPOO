@@ -1,6 +1,7 @@
 #include "Calculator.h"
 #include  "Parser.h"
 #include <iostream>
+#include <sstream>
 
 int Calculator::noCalculators = 0;
 
@@ -29,6 +30,24 @@ Calculator::~Calculator() {
     Calculator::noCalculators--;
 }
 
+bool isValidExpression(const std::string& expression) {
+ std::istringstream iss(expression);
+	std::string token;
+	int countDots = 0;
+    while (iss >> token) {
+        for (int i = 0; i < token.size(); i++) {
+            if (token[i] == '.') {
+				countDots++;
+			}
+        }
+        if (countDots > 1) {
+            return false;
+        }
+        countDots = 0;
+    }
+    return true;
+}
+
 void Calculator::run() {
     Parser p;
     std::string expression;
@@ -47,9 +66,15 @@ void Calculator::run() {
             isRunning = false;
             break;
         }
-
-        p.setExpression(expression);
-        p.processExpression();
+            			
+            p.setExpression(expression);
+            p.removeSpaces();
+            if (isValidExpression(p.getExpression()) == true) {
+                p.processExpression();
+            }
+            else {
+				std::cerr << "Error: Invalid expression. prea multe puncte" << std::endl;
+			}
     }
 }
 

@@ -10,7 +10,7 @@ public:
     Parser(const std::string& expression);
     ~Parser();
 
-    void removeSpaces(std::string expr, std::string* vec, int& index);
+    void removeSpaces();
     void processExpression();
 
     Parser(const Parser& other);
