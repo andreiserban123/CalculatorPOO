@@ -18,7 +18,7 @@ public:
 
     ~Calculator();
 
-    void run();
+    virtual void run();
     static void printNumberOfCalcs();
 
     friend void operator>>(std::istream& console, Calculator& c);

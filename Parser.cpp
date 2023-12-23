@@ -250,23 +250,23 @@ std::string Parser::infixToRPN(const std::string& infixExpression) {
                 operatorStack.pop();
             }
             if (!operatorStack.empty() && isOpeningParenthesis(operatorStack.top())) {
-                operatorStack.pop(); // Scoate și deschiderea parantezei
+                operatorStack.pop(); 
             }
             else {
                 std::cerr << "Error: Mismatched parentheses." << std::endl;
-                return ""; // Expresie invalidă
+                return ""; // 
             }
         }
         else {
             std::cerr << "Error: Invalid character in expression." << std::endl;
-            return ""; // Expresie invalidă
+            return ""; 
         }
     }
 
     while (!operatorStack.empty()) {
         if (isOpeningParenthesis(operatorStack.top()) || isClosingParenthesis(operatorStack.top())) {
             std::cerr << "Error: Mismatched parentheses." << std::endl;
-            return ""; // Expresie invalidă
+            return ""; 
         }
         rpnExpression += operatorStack.top();
         operatorStack.pop();

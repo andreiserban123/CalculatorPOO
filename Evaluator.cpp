@@ -71,8 +71,6 @@ double Evaluator::evaluateRPN(const std::string& rpnExpression) {
 }
 
 
-
-
 Evaluator Evaluator::operator++(int) {
     Evaluator copie = *this;
     result++;

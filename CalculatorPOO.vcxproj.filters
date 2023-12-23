@@ -30,12 +30,18 @@
     <ClCompile Include="Parser.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="CalculatorWithFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Evaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CalculatorWithFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

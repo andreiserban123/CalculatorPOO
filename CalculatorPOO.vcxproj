@@ -128,12 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Calculator.cpp" />
+    <ClCompile Include="CalculatorWithFile.cpp" />
     <ClCompile Include="Evaluator.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Parser.h" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CalculatorWithFile.h" />
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="Calculator.h" />
   </ItemGroup>
