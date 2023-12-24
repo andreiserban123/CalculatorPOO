@@ -4,10 +4,11 @@
 class Parser {
 private:
     char* expression;
-
+    bool outputToFile;
 public:
     Parser();
     Parser(const std::string& expression);
+    Parser(bool outputToFile);
     ~Parser();
 
     void removeSpaces();

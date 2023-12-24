@@ -6,7 +6,7 @@
 #include <sstream>
 
 
-Parser::Parser() : expression(nullptr) {}
+Parser::Parser() : expression(nullptr), outputToFile(false) {}
 
 Parser::Parser(const std::string& expression)
 {
@@ -21,6 +21,11 @@ Parser::Parser(const std::string& expression)
     }
     this->expression = new char[result.length() + 1];
     strcpy_s(this->expression, result.length() + 1, result.c_str());
+}
+
+Parser::Parser(bool outputToFile)
+{
+	this->outputToFile = outputToFile;
 }
 
 Parser::~Parser()
@@ -39,10 +44,8 @@ void Parser::removeSpaces() {
 
     std::string expr(this->expression);
 
-    // Remove all spaces
     expr.erase(std::remove_if(expr.begin(), expr.end(), ::isspace), expr.end());
 
-    // Add spaces around operators
     for (int i = 0; i < expr.length(); i++) {
         if (expr[i] == '+' || expr[i] == '-' || expr[i] == '*' || expr[i] == '#' || expr[i] == '^' || expr[i] == '(' || expr[i] == ')' || expr[i] == '[' || expr[i] == ']' || expr[i] == '/' || expr[i] == '%')
         {
@@ -78,7 +81,12 @@ void Parser::processExpression() {
         double result = evaluator.evaluateRPN(rpnExpression);
 
         evaluator.setResult(result);
-        evaluator.printFinalResult();
+        if (this->outputToFile == false) {
+            evaluator.printFinalResult();
+        }
+        else {
+			evaluator.printFinalResultToFile();
+        }
     }
 }
 
@@ -254,7 +262,7 @@ std::string Parser::infixToRPN(const std::string& infixExpression) {
             }
             else {
                 std::cerr << "Error: Mismatched parentheses." << std::endl;
-                return ""; // 
+                return ""; 
             }
         }
         else {

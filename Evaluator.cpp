@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <sstream>
 #include <stack>
+#include <fstream>
 
 Evaluator::Evaluator() : result(0), err(false) {}
 
@@ -14,6 +15,13 @@ bool Evaluator::getErr() {
 
 void Evaluator::setErr(bool t) {
 	this->err = t;
+}
+
+void Evaluator::printFinalResultToFile()
+{
+    std::ofstream out("result.txt");
+	out << std::fixed << std::setprecision(4) << result;
+	out.close();
 }
 
 double Evaluator::evaluateRPN(const std::string& rpnExpression) {

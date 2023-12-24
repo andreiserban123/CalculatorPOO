@@ -57,7 +57,7 @@ void Calculator::run() {
     std::cout << "Instructions: Enter a mathematical expression" << std::endl;
     std::cout << "              Or type 'exit'/'enter' to quit the calculator" << std::endl;
     std::cout << "==============================================" << std::endl;
-
+    std::cin.get();
     while (isRunning) {
         std::cout << "Expression: ";
         std::getline(std::cin, expression);
@@ -66,7 +66,6 @@ void Calculator::run() {
             isRunning = false;
             break;
         }
-            			
             p.setExpression(expression);
             p.removeSpaces();
             if (isValidExpression(p.getExpression()) == true) {

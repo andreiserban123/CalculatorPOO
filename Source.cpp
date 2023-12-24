@@ -1,5 +1,6 @@
 ﻿#include "Calculator.h"
 #include "Parser.h"
+#include "CalculatorWithFile.h"
 
 int main(int argc, char* argv[]) {
 	if (argc == 2) {
@@ -11,8 +12,23 @@ int main(int argc, char* argv[]) {
 		p.processExpression();
 	}
 	else {
-
-		Calculator calc(1);
-		calc.run();
+		bool flag = true;
+		std::cout << "Do you want to read from file or from console? (f/c)" << std::endl;
+		char choice;
+		std::cin >> choice;
+		if (choice == 'f') {
+			std::cout << "Enter the name of the file: ";
+			std::string fileName;
+			std::cin >> fileName;
+			CalculatorWithFile calc(1, fileName);
+			calc.run();
+		}
+		else if (choice == 'c') {
+			Calculator calc(1);
+			calc.run();
+		}
+		else {
+			std::cout << "Invalid choice" << std::endl;
+		}
 	}
 }
