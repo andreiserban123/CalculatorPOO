@@ -3,8 +3,8 @@
 
 class Parser {
 private:
-    char* expression;
-    bool outputToFile;
+    char* expression = nullptr;
+    bool outputToFile = false;
 public:
     Parser();
     Parser(const std::string& expression);

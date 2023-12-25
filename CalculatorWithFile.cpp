@@ -27,8 +27,9 @@ void CalculatorWithFile::run()
 		std::ifstream file(this->fileName);
 		if (file.is_open()) {
 		std::string line;
+		Parser p(true);
 		while (getline(file, line)) {
-			Parser p;
+			std::cout << line << std::endl;
 			p.setExpression(line);
 			p.removeSpaces();
 			p.processExpression();

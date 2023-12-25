@@ -10,6 +10,7 @@ Parser::Parser() : expression(nullptr), outputToFile(false) {}
 
 Parser::Parser(const std::string& expression)
 {
+    this->outputToFile = false;
     std::string result;
     int i;
     for (i = 0; i < expression.size(); i++)
@@ -26,6 +27,7 @@ Parser::Parser(const std::string& expression)
 Parser::Parser(bool outputToFile)
 {
 	this->outputToFile = outputToFile;
+    this->expression = nullptr;
 }
 
 Parser::~Parser()
@@ -69,7 +71,6 @@ void Parser::processExpression() {
         std::string rpnExpression = infixToRPN(expr);
 
         for (int i = 0; i < rpnExpression.size(); i++) {
-            //insert " "
             if (rpnExpression[i] == '+' || rpnExpression[i] == '-' || rpnExpression[i] == '*' || rpnExpression[i] == '/' || rpnExpression[i] == '%' || rpnExpression[i] == '^' || rpnExpression[i] == '#')
             {
 				rpnExpression.insert(i, " ");
@@ -94,6 +95,7 @@ Parser::Parser(const Parser& other)
 {
     if (other.expression != nullptr)
     {
+        this->outputToFile = other.outputToFile;
         expression = new char[std::strlen(other.expression) + 1];
         strcpy_s(expression, std::strlen(other.expression) + 1, other.expression);
     }

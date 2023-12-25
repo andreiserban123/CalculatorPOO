@@ -19,9 +19,18 @@ void Evaluator::setErr(bool t) {
 
 void Evaluator::printFinalResultToFile()
 {
-    std::ofstream out("result.txt");
-	out << std::fixed << std::setprecision(4) << result;
-	out.close();
+    //print with apend
+
+    std::ofstream file;
+    file.open("result.txt", std::ios::app);
+    if (file.is_open()) {
+		file << std::fixed << std::setprecision(4) << result << std::endl;
+		file.close();
+	}
+    else {
+		std::cout << "Unable to open file" << std::endl;
+	}
+
 }
 
 double Evaluator::evaluateRPN(const std::string& rpnExpression) {
