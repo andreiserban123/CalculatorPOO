@@ -33,6 +33,9 @@
     <ClCompile Include="CalculatorWithFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AdditionOperation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculator.h">
@@ -44,10 +47,17 @@
     <ClInclude Include="CalculatorWithFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Operation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AdditionOperation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="result.txt" />
   </ItemGroup>
 </Project>

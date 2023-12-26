@@ -7,11 +7,12 @@ private:
     const int id;
     bool isRunning;
     static int noCalculators;
+    bool intermediateResults;
 
 public:
     Calculator();
-    Calculator(int id);
-
+    Calculator(int id, bool intermediateResults);
+    bool isValidExpression(const std::string& expression);
     int getId();
     virtual bool getIsRunning();
     void setIsRunning(bool isRunning);

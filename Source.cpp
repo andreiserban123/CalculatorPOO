@@ -3,33 +3,12 @@
 #include "CalculatorWithFile.h"
 #include <sstream>
 
-bool isValidExpression(const std::string& expression) {
-	std::istringstream iss(expression);
-	std::string token;
-	int countDots = 0;
-	while (iss >> token) {
-		for (int i = 0; i < token.size(); i++) {
-			if (token[i] == '.') {
-				countDots++;
-			}
-		}
-		if (countDots > 1) {
-			return false;
-		}
-		countDots = 0;
-	}
-	return true;
-}
 
 int main(int argc, char* argv[]) {
 	if (argc == 2) {
 		std::cout << "You entered the expression from argument" << std::endl;
 		Parser p;
 		std::string expression = argv[1];
-		if (!isValidExpression(expression)) {
-			std::cout << "Invalid expression" << std::endl;
-			return 1;
-		}
 		p.setExpression(expression);
 		p.removeSpaces();
 		p.processExpression();
@@ -46,8 +25,20 @@ int main(int argc, char* argv[]) {
 			calc.run();
 		}
 		else if (choice == 'c') {
-			Calculator calc(1);
-			calc.run();
+			std::cout <<"Do you want to save intermediate results?(y/n)" << std::endl;
+			char choice;
+			std::cin >> choice;
+			if (choice == 'y') {
+				Calculator calc(1, true);
+				calc.run();
+			}
+			else if (choice == 'n') {
+				Calculator calc(1, false);
+				calc.run();
+			}
+			else {
+				std::cout << "Invalid choice" << std::endl;
+			}
 		}
 		else {
 			std::cout << "Invalid choice" << std::endl;

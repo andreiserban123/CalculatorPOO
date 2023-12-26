@@ -19,12 +19,17 @@ void Evaluator::setErr(bool t) {
 
 void Evaluator::printFinalResultToFile()
 {
-    //print with apend
 
     std::ofstream file;
     file.open("result.txt", std::ios::app);
     if (file.is_open()) {
-		file << std::fixed << std::setprecision(4) << result << std::endl;
+        if (result == 0.0) {
+
+            file << "Result: 0" << std::endl;
+        }
+        else {
+			file << std::fixed << std::setprecision(4) << "Result: " << result << std::endl;
+		}
 		file.close();
 	}
     else {
@@ -70,14 +75,12 @@ double Evaluator::evaluateRPN(const std::string& rpnExpression) {
                 operandStack.push(std::pow(operand1, 1 / operand2));
             }
             else {
-                // Handle other operators as needed
                 std::cerr << "Error: Unknown operator:  " << token << std::endl;
                 return 0.0;
             }
         }
     }
 
-    // The result should be on the top of the stack
     if (!operandStack.empty()) {
       return operandStack.top();
     }
@@ -118,8 +121,14 @@ void Evaluator::setResult(double x) {
 }
 
 void Evaluator::printFinalResult() {
-    if (!err)
-        std::cout << std::fixed << std::setprecision(4) << "Result:" << result;
+    if (!err) {
+        if (result == 0.0) {
+			std::cout << "Result: 0";
+		}
+        else {
+			std::cout << std::fixed << std::setprecision(4) << "Result: " << result;
+		}
+    }
     std::cout << std::endl;
 }
 
@@ -129,4 +138,14 @@ void operator<<(std::ostream& console, Evaluator& e) {
 
 void operator>>(std::istream& console, Evaluator& e) {
     console >> e.result;
+}
+
+void Evaluator::evaluate(double operand2, char token) {
+    if (currentOperation != nullptr) {
+        result = currentOperation->execute(result, operand2);
+    }
+    else {
+        std::cerr << "Error: No valid operation set." << std::endl;
+        err = true;
+    }
 }

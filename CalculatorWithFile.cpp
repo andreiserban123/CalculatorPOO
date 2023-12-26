@@ -3,23 +3,22 @@
 
 CalculatorWithFile::CalculatorWithFile()
 {
-	this->fileName = "";
+		this->fileName = "";
 }
 
-CalculatorWithFile::CalculatorWithFile(int id, std::string fileName) : Calculator(id)
+CalculatorWithFile::CalculatorWithFile(int id, std::string fileName) : Calculator(id, false)
 {
 	this->fileName = fileName;
 }
 
-
 std::string CalculatorWithFile::getFileName()
 {
-	return this->fileName;
+	return std::string();
 }
 
 void CalculatorWithFile::setFileName(std::string fileName)
 {
-		this->fileName = fileName;
+	this->fileName = fileName;
 }
 
 void CalculatorWithFile::run()
@@ -29,10 +28,18 @@ void CalculatorWithFile::run()
 		std::string line;
 		Parser p(true);
 		while (getline(file, line)) {
-			std::cout << line << std::endl;
-			p.setExpression(line);
-			p.removeSpaces();
-			p.processExpression();
+			bool isValid = Calculator::isValidExpression(line);
+			if (!isValid) {
+				std::ofstream results("result.txt", std::ios::app);
+				results << line << " is invalid" << std::endl;
+				results.close();
+			}
+			else {
+				p.setExpression(line);
+				p.removeSpaces();
+				p.processExpression();
+			}
+			
 		}
 		file.close();
 	}

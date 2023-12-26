@@ -7,10 +7,12 @@ int Calculator::noCalculators = 0;
 
 Calculator::Calculator() : id(0), isRunning(false) {
     Calculator::noCalculators++;
+    this->intermediateResults = false;
 }
 
-Calculator::Calculator(int id) : id(id) {
+Calculator::Calculator(int id, bool intermediateResults) : id(id) {
     isRunning = true;
+    this->intermediateResults = intermediateResults;
     Calculator::noCalculators++;
 }
 
@@ -30,7 +32,7 @@ Calculator::~Calculator() {
     Calculator::noCalculators--;
 }
 
-bool isValidExpression(const std::string& expression) {
+bool Calculator::isValidExpression(const std::string& expression) {
  std::istringstream iss(expression);
 	std::string token;
 	int countDots = 0;

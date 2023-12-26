@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "Operation.h"
 
 class Evaluator {
 private:
@@ -24,6 +25,8 @@ public:
     void printFinalResult();
     friend void operator<<(std::ostream& console, Evaluator& e);
     friend void operator>>(std::istream& console, Evaluator& e);
+    const Operation* currentOperation;
+    void evaluate(double operand2, char token);
 };
 
 void operator<<(std::ostream& console, Evaluator& e);

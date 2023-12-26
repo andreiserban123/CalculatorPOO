@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdditionOperation.cpp" />
     <ClCompile Include="Calculator.cpp" />
     <ClCompile Include="CalculatorWithFile.cpp" />
     <ClCompile Include="Evaluator.cpp" />
@@ -135,12 +136,15 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdditionOperation.h" />
     <ClInclude Include="CalculatorWithFile.h" />
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="Calculator.h" />
+    <ClInclude Include="Operation.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data.txt" />
+    <Text Include="result.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
