@@ -1,2 +1,1 @@
-Result: 0
-(0.425.242^7) is invalid
+Result: 15.0000

@@ -23,10 +23,13 @@ void CalculatorWithFile::setFileName(std::string fileName)
 
 void CalculatorWithFile::run()
 {
+		
 		std::ifstream file(this->fileName);
 		if (file.is_open()) {
 		std::string line;
 		Parser p(true);
+		std::ofstream clearResults("result.txt", std::ios::trunc);
+		clearResults.close();
 		while (getline(file, line)) {
 			bool isValid = Calculator::isValidExpression(line);
 			if (!isValid) {

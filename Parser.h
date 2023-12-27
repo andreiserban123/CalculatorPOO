@@ -5,15 +5,19 @@ class Parser {
 private:
     char* expression = nullptr;
     bool outputToFile = false;
+    bool saveIntermediateResults = false;
+    bool resultSaved = false;
 public:
     Parser();
     Parser(const std::string& expression);
     Parser(bool outputToFile);
     ~Parser();
-
+    bool getResultsSaved();
     void removeSpaces();
     void processExpression();
 
+    void setIntermediateResults(bool saveIntermediateResults);
+    void readIntermediateResult(double& prev);
     Parser(const Parser& other);
     Parser& operator=(const Parser& other);
 

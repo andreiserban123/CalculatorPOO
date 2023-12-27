@@ -4,6 +4,7 @@
 #include <string>
 #include <stack>
 #include <sstream>
+#include <fstream>
 
 
 Parser::Parser() : expression(nullptr), outputToFile(false) {}
@@ -30,6 +31,30 @@ Parser::Parser(bool outputToFile)
     this->expression = nullptr;
 }
 
+#include <fstream>
+
+// ...
+
+void Parser::readIntermediateResult(double &prev) {
+    if (this->saveIntermediateResults) {
+        std::ifstream file("intermediateResults.bin", std::ios::binary);
+
+        if (file.is_open()) {
+            double result;
+            file.read(reinterpret_cast<char*>(&result), sizeof(double));
+            prev = result;
+            file.close();
+        }
+        else {
+            std::cerr << "Error: Unable to open intermediateResults.bin for reading." << std::endl;
+        }
+    }
+    else {
+        std::cout << "Intermediate results saving is not enabled." << std::endl;
+    }
+}
+
+
 Parser::~Parser()
 {
     if (expression != nullptr)
@@ -37,6 +62,11 @@ Parser::~Parser()
         delete[] expression;
         this->expression = nullptr;
     }
+}
+
+bool Parser::getResultsSaved()
+{
+    return this->resultSaved;
 }
 
 
@@ -83,12 +113,31 @@ void Parser::processExpression() {
 
         evaluator.setResult(result);
         if (this->outputToFile == false) {
+            if (this->saveIntermediateResults == true) {
+                std::ofstream file("intermediateResults.bin", std::ios::binary | std::ios::trunc);
+                if (file.is_open()) {
+                    file.write((const char*)(&result), sizeof(double));
+                    file.close();
+                    this->resultSaved = true;
+                    std::cout << "You can use your previous result by typing 'r' in your next expression." << std::endl;
+                }
+                else {
+                    std::cerr << "Error: Unable to open intermediateResults.bin for writing." << std::endl;
+                }
+
+            }
             evaluator.printFinalResult();
         }
         else {
 			evaluator.printFinalResultToFile();
         }
     }
+}
+
+void Parser::setIntermediateResults(bool saveIntermediateResults)
+{
+    this->saveIntermediateResults = saveIntermediateResults;
+
 }
 
 Parser::Parser(const Parser& other)

@@ -20,7 +20,7 @@ public:
     ~Calculator();
 
     virtual void run();
-  static void printNumberOfCalcs();
+    static void printNumberOfCalcs();
 
     friend void operator>>(std::istream& console, Calculator& c);
     friend void operator<<(std::ostream& console, Calculator& c);

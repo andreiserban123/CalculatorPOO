@@ -60,13 +60,26 @@ void Calculator::run() {
     std::cout << "              Or type 'exit'/'enter' to quit the calculator" << std::endl;
     std::cout << "==============================================" << std::endl;
     std::cin.get();
+
+    if (this->intermediateResults == true) {
+        p.setIntermediateResults(true);
+    }
     while (isRunning) {
         std::cout << "Expression: ";
         std::getline(std::cin, expression);
-
+        
         if (expression == "exit" || expression == "") {
             isRunning = false;
             break;
+        }
+        if (p.getResultsSaved() == true) {
+            double prev;
+            p.readIntermediateResult(prev);
+            for (int i = 0; i < expression.size(); i++) {
+                if (expression[i] == 'r') {
+					expression.replace(i, 1, std::to_string(prev));
+				}
+			}
         }
             p.setExpression(expression);
             p.removeSpaces();
@@ -76,6 +89,7 @@ void Calculator::run() {
             else {
 				std::cerr << "Error: Invalid expression. prea multe puncte" << std::endl;
 			}
+
     }
 }
 
