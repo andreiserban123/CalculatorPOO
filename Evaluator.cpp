@@ -66,6 +66,11 @@ double Evaluator::evaluateRPN(const std::string& rpnExpression) {
                 operandStack.push(operand1 * operand2);
             }
             else if (token == "/") {
+                if (operand2 == 0) {
+					std::cerr << "Error: Division by zero" << std::endl;
+                    this->err = true;
+					return 0.0;
+				}
                 operandStack.push(operand1 / operand2);
             }
             else if (token == "^") {

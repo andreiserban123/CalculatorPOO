@@ -4,8 +4,8 @@
 
 class Evaluator {
 private:
-    double result;
-    bool err;
+    double result = 0 ;
+    bool err =false;
 
 public:
     Evaluator();
