@@ -5,10 +5,14 @@
 
 
 int main(int argc, char* argv[]) {
-	if (argc == 2) {
+	if (argc >= 2) {
 		std::cout << "You entered the expression from argument" << std::endl;
 		Parser p;
-		std::string expression = argv[1];
+		std::string expression;
+		for (int i = 1; i < argc; i++) {
+			expression += argv[i];
+			expression += " ";
+		}
 		p.setExpression(expression);
 		p.removeSpaces();
 		p.processExpression();
