@@ -111,20 +111,24 @@ void Parser::processExpression() {
 
         double result = evaluator.evaluateRPN(rpnExpression);
 
+
         evaluator.setResult(result);
         if (this->outputToFile == false) {
-            if (this->saveIntermediateResults == true) {
-                std::ofstream file("intermediateResults.bin", std::ios::binary | std::ios::trunc);
-                if (file.is_open()) {
-                    file.write((const char*)(&result), sizeof(double));
-                    file.close();
-                    this->resultSaved = true;
-                    std::cout << "You can use your previous result by typing 'r' in your next expression." << std::endl;
-                }
-                else {
-                    std::cerr << "Error: Unable to open intermediateResults.bin for writing." << std::endl;
-                }
+            if (evaluator.getErr() == false) {
 
+                if (this->saveIntermediateResults == true) {
+                    std::ofstream file("intermediateResults.bin", std::ios::binary | std::ios::trunc);
+                    if (file.is_open()) {
+                        file.write((const char*)(&result), sizeof(double));
+                        file.close();
+                        this->resultSaved = true;
+                        std::cout << "You can use your previous result by typing 'r' in your next expression." << std::endl;
+                    }
+                    else {
+                        std::cerr << "Error: Unable to open intermediateResults.bin for writing." << std::endl;
+                    }
+
+                }
             }
             evaluator.printFinalResult();
         }

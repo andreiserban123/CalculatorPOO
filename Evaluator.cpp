@@ -19,7 +19,10 @@ void Evaluator::setErr(bool t) {
 
 void Evaluator::printFinalResultToFile()
 {
-
+    if(this->err == true) {
+        std::cout << "Error: No valid operation set." << std::endl;
+		return;
+	}
     std::ofstream file;
     file.open("result.txt", std::ios::app);
     if (file.is_open()) {
@@ -81,6 +84,7 @@ double Evaluator::evaluateRPN(const std::string& rpnExpression) {
             }
             else {
                 std::cerr << "Error: Unknown operator:  " << token << std::endl;
+                this->err = true;
                 return 0.0;
             }
         }
@@ -151,6 +155,6 @@ void Evaluator::evaluate(double operand2, char token) {
     }
     else {
         std::cerr << "Error: No valid operation set." << std::endl;
-        err = true;
+        this->err = true;
     }
 }
